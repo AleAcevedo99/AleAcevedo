@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">AleAcevedo</string>
+    <string name="txt_image_description">Descripcion</string>
+    <string name="hint_email">Correo</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="txt_btn_log_in">Aceptar</string>
+    <string name="txt_list_view">Registro</string>
+    <string name="txt_log_in">LogIn</string>
+    <string name="txt_register">Registro</string>
+    <string name="hint_phone">Teléfono</string>
+    <string name="txt_btn_register">Registrarse</string>
+    <string name="txt_home">Home</string>
+    <string name="txt_read_frecuency">¿Con qué frecuencia lees como hobbie?</string>
+    <string name="txt_yes">Sí</string>
+    <string name="txt_no">No</string>
+    <string name="txt_uses_app">¿Usas alguna aplicación para obtener recomendaciones de libros?</string>
+    <string name="txt_disavantage">¿Cuál dirías que es el principal problema de las aplicaciones de recomendaciones de libros?</string>
+    <string name="txt_functionalities">Marca las funcionalidades que más te interesarían en una aplicación de libros</string>
+    <string name="txt_rec_per_author">Recomendaciones por autor</string>
+    <string name="txt_rec_per_gender">Recomendaciones por género</string>
+    <string name="txt_shelf_organization">Organización de libreros</string>
+    <string name="txt_rec_per_topic">Recomendaciones por cierta trama</string>
+    <string name="txt_interested">¿Estarías interesado en una app para la organización y recomendación de libros?</string>
+    <string name="txt_create_survey">Crear encuesta</string>
+    <string name="txt_exit">Salir</string>
+    <string name="txt_name">Nombre de la encuesta</string>
+    <string name="txt_send">Aceptar</string>
+    <string name="txt_survey">Mi encuesta</string>
+    <string name="txt_detail">Detalle</string>
+    <string name="txt_edit">Editar</string>
+</resources>
