@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.aleacevedo.Entity.EntitySurvey
 import com.example.aleacevedo.Entity.ListSurveys
 import com.example.aleacevedo.Entity.ListUsers
@@ -133,8 +134,7 @@ class SurveyActivity : AppCompatActivity() {
         when(requestCode){
             3 -> {
                 if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Snackbar.make(findViewById(android.R.id.content), "Es obligatorio aceptar el permiso de escribir en la memoria " +
-                            "para realizar esta acción", Snackbar.LENGTH_LONG).show()
+                    actionDialog("Es obligatorio aceptar el permiso de escribir en la memoria para realizar esta acción").show()
                 }else{
                     saveSurvey()
                 }
@@ -142,5 +142,16 @@ class SurveyActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun actionDialog(message:String): AlertDialog {
+        val alert = AlertDialog.Builder(this)
+        alert.setTitle("Ale App")
+        alert.setIcon(R.drawable.fenix)
+        alert.setMessage(message)
+        alert.setPositiveButton("Ok"){_,_ ->
+
+        }
+        return  alert.create()
     }
 }

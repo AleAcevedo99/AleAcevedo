@@ -160,13 +160,23 @@ class HomeActivity : AppCompatActivity() {
             }
             2 -> {
                 if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Snackbar.make(findViewById(android.R.id.content), "Es obligatorio aceptar el permiso del micrófono " +
-                            "para realizar esta acción", Snackbar.LENGTH_LONG).show()
+                    actionDialog("Es obligatorio aceptar el permiso del micrófono para realizar esta acción").show()
                 }else{
                     selectedItemEvent()
                 }
             }
         }
+    }
+
+    fun actionDialog(message:String): AlertDialog {
+        val alert = AlertDialog.Builder(this)
+        alert.setTitle("Ale App")
+        alert.setIcon(R.drawable.fenix)
+        alert.setMessage(message)
+        alert.setPositiveButton("Ok"){_,_ ->
+
+        }
+        return  alert.create()
     }
 
 }
