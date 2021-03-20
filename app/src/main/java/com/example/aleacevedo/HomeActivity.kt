@@ -1,6 +1,7 @@
 package com.example.aleacevedo
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -12,14 +13,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.aleacevedo.Entity.ListSurveys
 import com.example.aleacevedo.Entity.ListUsers
+import com.example.aleacevedo.Tools.ApplicationPermissions
 import com.example.aleacevedo.Tools.Constants
 import com.example.aleacevedo.databinding.ActivityHomeBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private var listSurveys = ListSurveys()
     private var userPosition = -1
+    private val permission = ApplicationPermissions(this@HomeActivity)
+    private var listPosition: Int = 0
+    private var selectedItem: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -28,15 +34,23 @@ class HomeActivity : AppCompatActivity() {
 
         supportActionBar?.setTitle(R.string.txt_home)
 
+        if(!permission.hasPermissions(Constants.ACCESS_FINE_LOCATION)){
+            permission.acceptPermission(Constants.ACCESS_FINE_LOCATION, 1)
+        }
+
         userPosition= intent.getIntExtra(Constants.USER, -1)
         if(userPosition != -1){
             loadSurveyList()
 
             binding.ltvSurvey.setOnItemClickListener{ adapterView: AdapterView<*>, view1: View,
                                                         position: Int, id: Long ->
-                val selectedItem = adapterView.getItemAtPosition(position).toString()
-                val name = selectedItem.split("|")[0].trim()
-                actionDialog(position, name).show()
+                listPosition = position
+                selectedItem = adapterView.getItemAtPosition(position).toString()
+                if(!permission.hasPermissions(Constants.RECORD_AUDIO)){
+                    permission.acceptPermission(Constants.RECORD_AUDIO, 2)
+                }else{
+                    selectedItemEvent()
+                }
 
             }
 
@@ -44,6 +58,11 @@ class HomeActivity : AppCompatActivity() {
             Toast.makeText(this@HomeActivity, "Error al cargar la actividad", Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+
+    fun selectedItemEvent(){
+        val name = selectedItem.split("|")[0].trim()
+        actionDialog(listPosition, name).show()
     }
 
     fun actionDialog(position: Int, name: String): AlertDialog {
@@ -54,7 +73,8 @@ class HomeActivity : AppCompatActivity() {
             if(listSurveys.delete(name, userPosition)){
                 Toast.makeText(this@HomeActivity, "Encuesta eliminada", Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(this@HomeActivity, "Error al eliminar", Toast.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(android.R.id.content), "Error al eliminar", Snackbar.LENGTH_SHORT).show()
+                //Toast.makeText(this@HomeActivity, "Error al eliminar", Toast.LENGTH_SHORT).show()
             }
             loadSurveyList()
         }
@@ -92,6 +112,12 @@ class HomeActivity : AppCompatActivity() {
                     }
                 startActivity(intent)
             }
+            R.id.itmSeeList -> {
+                val intent = Intent(this@HomeActivity, MyListActivity::class.java).apply{
+                    putExtra(Constants.USER, userPosition)
+                }
+                startActivity(intent)
+            }
             R.id.itmExit -> {
                     val intent = Intent(this@HomeActivity, LogInActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -121,4 +147,26 @@ class HomeActivity : AppCompatActivity() {
         binding.ltvSurvey.adapter = adapter
 
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            1 -> {
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Snackbar.make(findViewById(android.R.id.content), "Es obligatorio aceptar el permiso de ubicación " +
+                            "para utilizar esta aplicación", Snackbar.LENGTH_LONG).show()
+                    finish()
+                }
+            }
+            2 -> {
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Snackbar.make(findViewById(android.R.id.content), "Es obligatorio aceptar el permiso del micrófono " +
+                            "para realizar esta acción", Snackbar.LENGTH_LONG).show()
+                }else{
+                    selectedItemEvent()
+                }
+            }
+        }
+    }
+
 }

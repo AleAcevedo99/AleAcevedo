@@ -12,4 +12,12 @@
         <item>De vez en cuando</item>
         <item>Poco</item>
     </string-array>
+
+    <string-array name="age_category">
+        <item>Seleccionar</item>
+        <item>Infantil</item>
+        <item>Juevenil</item>
+        <item>New Adult</item>
+        <item>Adulta</item>
+    </string-array>
 </resources>

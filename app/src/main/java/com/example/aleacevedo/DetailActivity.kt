@@ -1,5 +1,6 @@
 package com.example.aleacevedo
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -15,6 +16,7 @@ class DetailActivity : AppCompatActivity() {
     private var listSurveys = ListSurveys()
     private var userPosition = -1
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -32,13 +34,14 @@ class DetailActivity : AppCompatActivity() {
 
                 binding.txvName.setText(survey.name)
 
+                binding.txvGender.text = if (survey.gender == 1) "Masculino" else "Femenino"
+
                 binding.txvReadFrecuency.text = "Lee: ${if (survey.readFrecuency == 1) "Muy frecuentemente"
                 else if(survey.readFrecuency == 2) "De vez en cuando"
                 else if(survey.readFrecuency == 3) "Poco" 
                 else "No especificado"}"
 
-                binding.txvReadApp.text = "${if (survey.readApp) "Usa una app de libros"
-                else "No usa una app de libros"}"
+                binding.txvReadApp.text = if (survey.readApp) "Usa una app de libros" else "No usa una app de libros"
 
                 binding.txvFeautres.text = "Funcionalidades que le interesan: ${if (survey.recomendationPerAuthor) "Recomendaciones por autor" else ""}" +
                         " ${if (survey.recomendationsPerGender) "Recomendaciones por género" else ""}" +
@@ -47,7 +50,23 @@ class DetailActivity : AppCompatActivity() {
                         "${if (!survey.recomendationPerAuthor && !survey.recomendationsPerGender
                                 && !survey.shelfOrganization && !survey.recomendationPerTopic) "Sin registrar" else ""}"
 
-                binding.txvInterested.text = "${if(survey.interested) "Interesado en la app" else "No interesado en la app"}"
+                binding.txvAgeCategory.text = "Literatura ${if (survey.ageCategory == 1) "Infantil"
+                else if(survey.ageCategory == 2) "Juvenil"
+                else if(survey.ageCategory == 3) "New Adult"
+                else "Adulta"}"
+
+                binding.txvSelectBooks.text = "Para seleccionar un libro se basa en: ${if (survey.selectPerAuthor) "Autor" else ""}" +
+                        " ${if (survey.selectPerGender) "Género" else ""}" +
+                        " ${if (survey.selectPerReview) "Reseñas" else ""}" +
+                        "${if (!survey.selectPerGender && !survey.selectPerReview
+                                && !survey.selectPerAuthor) "Sin registrar" else ""}"
+
+                binding.txvDisavantage.setText("Desventaja que encuentra en las app actuales: ${survey.disavantage}")
+
+                binding.txvWriteReviews.text = if (survey.writeReviews) "Le gusta escribir reseñas de libros"
+                else "No le gusta escribir reseñas de libros"
+
+                binding.txvInterested.text = if(survey.interested) "Interesado en la app" else "No interesado en la app"
 
                 binding.txvDate.text = "Fecha: ${simpleDateFormat.format(survey.date)}"
 

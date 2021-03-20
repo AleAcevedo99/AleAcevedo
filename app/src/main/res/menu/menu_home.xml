@@ -5,6 +5,10 @@
         android:title="@string/txt_create_survey"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/itmSeeList"
+        android:title="@string/txt_see_list"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/itmExit"
         android:title="@string/txt_exit"
         app:showAsAction="never"/>

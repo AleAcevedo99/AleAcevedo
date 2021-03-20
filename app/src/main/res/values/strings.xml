@@ -28,4 +28,15 @@
     <string name="txt_survey">Mi encuesta</string>
     <string name="txt_detail">Detalle</string>
     <string name="txt_edit">Editar</string>
+    <string name="txt_see_list">Ver lista</string>
+    <string name="txt_my_list">Mi lista</string>
+    <string name="txt_gender">Género</string>
+    <string name="txt_men">Masculino</string>
+    <string name="txt_woman">Femenino</string>
+    <string name="txt_age_category">¿Cuál clasificación de literatura sueles leer más?</string>
+    <string name="txt_book_selection">Marca los factores en los que más te centras para seleccionar un libro</string>
+    <string name="txt_select_per_author">Autor</string>
+    <string name="txt_select_per_gender">Género</string>
+    <string name="txt_select_per_review">Reseñas</string>
+    <string name="txt_write_reviews">¿Te gusta escribir reseñas de los libros que lees?</string>
 </resources>

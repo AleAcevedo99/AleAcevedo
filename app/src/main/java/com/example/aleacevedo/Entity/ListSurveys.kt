@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.aleacevedo.Tools.Constants
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ListSurveys {
 
@@ -56,6 +57,17 @@ class ListSurveys {
             }
         }
         return answerList.toTypedArray()
+    }
+
+    fun getListArraySurveys(userPoistion:Int):ArrayList<EntitySurvey>{
+        val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+        val answerList = arrayListOf<EntitySurvey>()
+        for((index, item) in listSurveys.withIndex()){
+            if(item.user == userPoistion){
+                answerList.add(item)
+            }
+        }
+        return answerList
     }
 
     fun getSurvey(name:String, userPosition:Int):EntitySurvey?{
