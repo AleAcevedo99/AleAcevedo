@@ -60,7 +60,6 @@ class ListSurveys {
     }
 
     fun getListArraySurveys(userPoistion:Int):ArrayList<EntitySurvey>{
-        val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
         val answerList = arrayListOf<EntitySurvey>()
         for((index, item) in listSurveys.withIndex()){
             if(item.user == userPoistion){

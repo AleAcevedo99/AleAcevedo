@@ -13,15 +13,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="189dp">
 
         <ImageView
             android:id="@+id/imvLogo"
             android:layout_width="132dp"
-            android:layout_height="133dp"
+            android:layout_height="136dp"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher_round" />
@@ -88,5 +87,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnEdit"
             app:srcCompat="@drawable/ic_pageview_black_24dp" />
+
+        <TextView
+            android:id="@+id/txvSelectedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/imvLogo"
+            app:layout_constraintTop_toBottomOf="@+id/txvReadFrecuency" />
+
+        <TextView
+            android:id="@+id/txvSelectedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/imvLogo"
+            app:layout_constraintTop_toBottomOf="@+id/txvSelectedDate" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

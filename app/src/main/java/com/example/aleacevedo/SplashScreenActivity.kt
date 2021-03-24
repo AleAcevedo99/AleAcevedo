@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 
 class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +13,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         supportActionBar?.hide();
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this@SplashScreenActivity, LogInActivity::class.java)
             startActivity(intent)
             finish()

@@ -39,4 +39,6 @@
     <string name="txt_select_per_gender">Género</string>
     <string name="txt_select_per_review">Reseñas</string>
     <string name="txt_write_reviews">¿Te gusta escribir reseñas de los libros que lees?</string>
+    <string name="hint_date">Click para seleccionar la fecha</string>
+    <string name="hint_time">Click para seleccionar la hora</string>
 </resources>

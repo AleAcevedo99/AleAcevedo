@@ -1,20 +1,20 @@
 package com.example.aleacevedo
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.aleacevedo.Entity.EntitySurvey
 import com.example.aleacevedo.Entity.ListSurveys
 import com.example.aleacevedo.Tools.Constants
-import com.example.aleacevedo.databinding.ActivityDetailBinding
 import com.example.aleacevedo.databinding.ActivityEditBinding
-import com.example.aleacevedo.databinding.ActivityHomeBinding
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.util.*
 
 class EditActivity : AppCompatActivity() {
@@ -31,9 +31,34 @@ class EditActivity : AppCompatActivity() {
         val name = intent.getStringExtra(Constants.SURVEY_NAME)
         val userPosition = intent.getIntExtra(Constants.USER, -1)
 
+
+
         if(name != null && userPosition != -1){
             var surveyOrigin = listSurveys.getSurvey(name, userPosition)
             if(surveyOrigin != null){
+
+                binding.edtDate.setOnClickListener {
+                    val myDate: LocalDate? = surveyOrigin.dateSelected?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                    val dpd = DatePickerDialog(this@EditActivity,
+                            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                                binding.edtDate.setText("${twoDigits(dayOfMonth)}/${twoDigits(month+1)}/$year")
+                            }, myDate!!.year, (myDate!!.monthValue-1), myDate!!.dayOfMonth)
+                    dpd.show()
+                }
+
+                binding.edtTime.setOnClickListener {
+                    val myDate: LocalDateTime? = surveyOrigin.timeSelected?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+                    val tpd = TimePickerDialog(this@EditActivity,
+                            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                                binding.edtTime.setText("${twoDigits(hourOfDay)}:${twoDigits(minute)}")
+                            }, myDate!!.hour, myDate!!.minute, false)
+                    tpd.show()
+                }
+                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val stf = SimpleDateFormat("HH:mm")
+
+                binding.edtDate.setText(sdf.format(surveyOrigin.dateSelected))
+                binding.edtTime.setText(stf.format(surveyOrigin.timeSelected))
 
                 binding.edtName.setText(surveyOrigin.name)
 
@@ -113,6 +138,12 @@ class EditActivity : AppCompatActivity() {
 
                         survey.date = Date()
 
+                        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                        survey.dateSelected = sdf.parse(binding.edtDate.text.toString())
+
+                        val stf = SimpleDateFormat("HH:mm", Locale.getDefault())
+                        survey.timeSelected = stf.parse(binding.edtTime.text.toString())
+
                         val index = listSurveys.edit(survey, surveyOrigin.name, userPosition)
                         if(index != -1){
                             Toast.makeText(this@EditActivity, "Encuesta actualizada", Toast.LENGTH_SHORT).show()
@@ -161,5 +192,11 @@ class EditActivity : AppCompatActivity() {
         binding.ckbSelectPerReview.isChecked = false
         binding.edtDisavantage.setText("")
         binding.rgdWriteReviews.clearCheck()
+        binding.edtDate.setText("")
+        binding.edtTime.setText("")
+    }
+
+    fun twoDigits(number:Int):String{
+        return if(number <= 9) "0$number" else number.toString()
     }
 }

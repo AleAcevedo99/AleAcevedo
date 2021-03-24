@@ -32,6 +32,9 @@ class SurveyAdapter (var surveysList:ArrayList<EntitySurvey>, val context: Conte
 
     override fun onBindViewHolder(holder: SurveytHolder, position: Int) {
         val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val sdt = SimpleDateFormat("HH:mm")
+
         if(surveysList[position].gender == 1){
             holder.imgLogo.setImageResource(R.drawable.avatar_hombre)
         }else{
@@ -44,8 +47,11 @@ class SurveyAdapter (var surveysList:ArrayList<EntitySurvey>, val context: Conte
         else if(surveysList[position].readFrecuency == 3) "Poco"
         else "No especificado"}"
 
+        holder.txvSelectedDate.text = "Fecha ingresada: ${sdf.format(surveysList[position].dateSelected)}"
+        holder.txvSelectedTime.text = "Tiempo ingresado: ${sdt.format(surveysList[position].timeSelected)}"
+
         holder.btnDelete.setOnClickListener {
-            actionDialog(surveysList[position].name, surveysList[position].user, it).show()
+            actionDialog(surveysList[position].name, surveysList[position].user, position, it).show()
         }
 
         holder.btnEdit.setOnClickListener {
@@ -67,7 +73,7 @@ class SurveyAdapter (var surveysList:ArrayList<EntitySurvey>, val context: Conte
 
     }
 
-    fun actionDialog(name:String, user:Int, view: View): AlertDialog {
+    fun actionDialog(name:String, user:Int, position: Int, view: View): AlertDialog {
         val alert = AlertDialog.Builder(context)
         alert.setTitle("Ale App")
         alert.setIcon(R.drawable.fenix)
@@ -76,7 +82,8 @@ class SurveyAdapter (var surveysList:ArrayList<EntitySurvey>, val context: Conte
         alert.setPositiveButton("Sí"){_,_ ->
             if(surveys.delete(name, user)){
                 Toast.makeText(context, "Encuesta eliminada", Toast.LENGTH_SHORT).show()
-                surveysList = surveys.getListArraySurveys(user)
+                surveysList.removeAt(position)
+                //surveysList = surveys.getListArraySurveys(user)
                 notifyDataSetChanged()
             }else{
                 Snackbar.make(view, "Error al eliminar", Snackbar.LENGTH_SHORT).show()
@@ -100,6 +107,8 @@ class SurveytHolder(view: View): RecyclerView.ViewHolder(view){
     val txvName = binding.txvName
     val txvDate = binding.txvDate
     val txvReadFrecuency = binding.txvReadFrecuency
+    val txvSelectedDate = binding.txvSelectedDate
+    val txvSelectedTime = binding.txvSelectedTime
     val btnDelete = binding.btnDelete
     val btnEdit = binding.btnEdit
     val btnView = binding.btnView

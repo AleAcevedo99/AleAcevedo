@@ -30,7 +30,9 @@ class DetailActivity : AppCompatActivity() {
         if(name != null && userPosition != -1){
             var survey = listSurveys.getSurvey(name, userPosition)
             if(survey != null){
-                val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm")
+                val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val sdt = SimpleDateFormat("HH:mm")
 
                 binding.txvName.setText(survey.name)
 
@@ -69,6 +71,8 @@ class DetailActivity : AppCompatActivity() {
                 binding.txvInterested.text = if(survey.interested) "Interesado en la app" else "No interesado en la app"
 
                 binding.txvDate.text = "Fecha: ${simpleDateFormat.format(survey.date)}"
+                binding.txvDateSelected.text = "Fecha ingresada: ${sdf.format(survey.dateSelected)}"
+                binding.txvTimeSelected.text = "Tiempo ingresado: ${sdt.format(survey.timeSelected)}"
 
             }else{
                 Toast.makeText(this@DetailActivity, "Error al cargar la actividad", Toast.LENGTH_SHORT).show()

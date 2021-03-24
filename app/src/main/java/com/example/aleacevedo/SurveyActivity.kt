@@ -1,5 +1,7 @@
 package com.example.aleacevedo
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +18,11 @@ import com.example.aleacevedo.databinding.ActivityHomeBinding
 import com.example.aleacevedo.databinding.ActivitySurveyBinding
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class SurveyActivity : AppCompatActivity() {
@@ -35,6 +39,29 @@ class SurveyActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.txt_survey)
 
         userPosition= intent.getIntExtra(Constants.USER, -1)
+
+        binding.edtDate.setOnClickListener {
+            val myCalendar = Calendar.getInstance()
+            val y = myCalendar.get(Calendar.YEAR)
+            val m = myCalendar.get(Calendar.MONTH)
+            val d = myCalendar.get(Calendar.DAY_OF_MONTH)
+            val dpd = DatePickerDialog(this@SurveyActivity,
+                    DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                        binding.edtDate.setText("${twoDigits(dayOfMonth)}/${twoDigits(month+1)}/$year")
+                    }, y, m, d)
+            dpd.show()
+        }
+
+        binding.edtTime.setOnClickListener {
+            val myCalendar = Calendar.getInstance()
+            val h = myCalendar.get(Calendar.HOUR_OF_DAY)
+            val m = myCalendar.get(Calendar.MINUTE)
+            val tpd = TimePickerDialog(this@SurveyActivity,
+                    TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                        binding.edtTime.setText("${twoDigits(hourOfDay)}:${twoDigits(minute)}")
+                    }, h, m, false)
+            tpd.show()
+        }
 
         if(userPosition != -1){
             binding.btnOk.setOnClickListener {
@@ -58,7 +85,9 @@ class SurveyActivity : AppCompatActivity() {
             && binding.spnFrecuency.selectedItemPosition != 0
             && binding.spnAgeCategory.selectedItemPosition != 0
             && binding.edtDisavantage.text.trim().isNotEmpty()
-            && binding.rgdWriteReviews.checkedRadioButtonId != -1){
+            && binding.rgdWriteReviews.checkedRadioButtonId != -1
+            && binding.edtTime.text.isNotEmpty()
+            && binding.edtDate.text.isNotEmpty()){
 
             val survey = EntitySurvey()
             survey.name = binding.edtName.text.toString()
@@ -96,6 +125,12 @@ class SurveyActivity : AppCompatActivity() {
 
             survey.date = Date()
 
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            survey.dateSelected = sdf.parse(binding.edtDate.text.toString())
+
+            val stf = SimpleDateFormat("HH:mm", Locale.getDefault())
+            survey.timeSelected = stf.parse(binding.edtTime.text.toString())
+
             val index = listSurveys.add(survey)
             if(index != -1){
                 Toast.makeText(this@SurveyActivity, "Encuesta registrada", Toast.LENGTH_SHORT).show()
@@ -126,6 +161,8 @@ class SurveyActivity : AppCompatActivity() {
         binding.ckbSelectPerGender.isChecked = false
         binding.ckbSelectPerReview.isChecked = false
         binding.edtDisavantage.setText("")
+        binding.edtDate.setText("")
+        binding.edtTime.setText("")
         binding.rgdWriteReviews.clearCheck()
     }
 
@@ -153,5 +190,9 @@ class SurveyActivity : AppCompatActivity() {
 
         }
         return  alert.create()
+    }
+
+    fun twoDigits(number:Int):String{
+        return if(number <= 9) "0$number" else number.toString()
     }
 }

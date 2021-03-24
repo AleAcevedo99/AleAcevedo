@@ -19,7 +19,9 @@ data class EntitySurvey(
     var selectPerGender: Boolean,
     var disavantage: String,
     var writeReviews: Boolean,
-    var date: Date?){
+    var date: Date?,
+    var dateSelected: Date?,
+    var timeSelected: Date?){
     constructor():this("", 0, 0,0, 0,false, false, false, false, false,
-    false, false, false, false, "", false, null)
+    false, false, false, false, "", false, null, null, null)
 }
