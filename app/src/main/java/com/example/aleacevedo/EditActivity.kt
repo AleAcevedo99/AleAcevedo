@@ -37,28 +37,30 @@ class EditActivity : AppCompatActivity() {
             var surveyOrigin = listSurveys.getSurvey(name, userPosition)
             if(surveyOrigin != null){
 
+                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val stf = SimpleDateFormat("HH:mm")
+
+                binding.edtDate.setText(sdf.format(surveyOrigin.dateSelected))
+                binding.edtTime.setText(stf.format(surveyOrigin.timeSelected))
+
                 binding.edtDate.setOnClickListener {
-                    val myDate: LocalDate? = surveyOrigin.dateSelected?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                    val myDate: LocalDate? = sdf.parse(binding.edtDate.text.toString())?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
                     val dpd = DatePickerDialog(this@EditActivity,
                             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                                 binding.edtDate.setText("${twoDigits(dayOfMonth)}/${twoDigits(month+1)}/$year")
-                            }, myDate!!.year, (myDate!!.monthValue-1), myDate!!.dayOfMonth)
+                            }, myDate!!.year, myDate!!.monthValue-1, myDate!!.dayOfMonth)
                     dpd.show()
                 }
 
                 binding.edtTime.setOnClickListener {
-                    val myDate: LocalDateTime? = surveyOrigin.timeSelected?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+                    val stf = SimpleDateFormat("HH:mm")
+                    val myDate: LocalDateTime? = stf.parse(binding.edtTime.text.toString())?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
                     val tpd = TimePickerDialog(this@EditActivity,
                             TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                                 binding.edtTime.setText("${twoDigits(hourOfDay)}:${twoDigits(minute)}")
                             }, myDate!!.hour, myDate!!.minute, false)
                     tpd.show()
                 }
-                val sdf = SimpleDateFormat("dd/MM/yyyy")
-                val stf = SimpleDateFormat("HH:mm")
-
-                binding.edtDate.setText(sdf.format(surveyOrigin.dateSelected))
-                binding.edtTime.setText(stf.format(surveyOrigin.timeSelected))
 
                 binding.edtName.setText(surveyOrigin.name)
 

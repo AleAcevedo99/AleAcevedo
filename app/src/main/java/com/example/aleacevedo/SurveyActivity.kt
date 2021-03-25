@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.aleacevedo.Entity.EntitySurvey
@@ -41,10 +42,22 @@ class SurveyActivity : AppCompatActivity() {
         userPosition= intent.getIntExtra(Constants.USER, -1)
 
         binding.edtDate.setOnClickListener {
-            val myCalendar = Calendar.getInstance()
-            val y = myCalendar.get(Calendar.YEAR)
-            val m = myCalendar.get(Calendar.MONTH)
-            val d = myCalendar.get(Calendar.DAY_OF_MONTH)
+            val myCalendar: Calendar
+            val y: Int
+            val m: Int
+            val d: Int
+            if(binding.edtDate.text.toString().isEmpty()){
+                myCalendar = Calendar.getInstance()
+                y = myCalendar.get(Calendar.YEAR)
+                m = myCalendar.get(Calendar.MONTH)
+                d = myCalendar.get(Calendar.DAY_OF_MONTH)
+            }else{
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val myDate: LocalDate? = sdf.parse(binding.edtDate.text.toString())?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                y = myDate!!.year
+                m = myDate!!.monthValue-1
+                d = myDate!!.dayOfMonth
+            }
             val dpd = DatePickerDialog(this@SurveyActivity,
                     DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                         binding.edtDate.setText("${twoDigits(dayOfMonth)}/${twoDigits(month+1)}/$year")
@@ -52,10 +65,21 @@ class SurveyActivity : AppCompatActivity() {
             dpd.show()
         }
 
+
         binding.edtTime.setOnClickListener {
-            val myCalendar = Calendar.getInstance()
-            val h = myCalendar.get(Calendar.HOUR_OF_DAY)
-            val m = myCalendar.get(Calendar.MINUTE)
+            val myCalendar: Calendar
+            val h: Int
+            val m: Int
+            if(binding.edtTime.text.toString().isEmpty()){
+                myCalendar = Calendar.getInstance()
+                h = myCalendar.get(Calendar.HOUR_OF_DAY)
+                m = myCalendar.get(Calendar.MINUTE)
+            }else{
+                val stf = SimpleDateFormat("HH:mm")
+                val myDate: LocalDateTime? = stf.parse(binding.edtTime.text.toString())?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+                h = myDate!!.hour
+                m = myDate!!.minute
+            }
             val tpd = TimePickerDialog(this@SurveyActivity,
                     TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                         binding.edtTime.setText("${twoDigits(hourOfDay)}:${twoDigits(minute)}")
